@@ -143,13 +143,107 @@ function scrollToEditor() {
     document.getElementById('editor-section').scrollIntoView({ behavior: "smooth" });
 }
 
-// Инициализация
+// ====================== LOCALSTORAGE ======================
+
+function saveToLocalStorage() {
+    const canvasData = grid.map(pixel => pixel.style.backgroundColor || defaultBg);
+    
+    const data = {
+        currentColor: currentColor,
+        colors: colors,
+        gridSize: gridSize,
+        canvasData: canvasData
+    };
+    
+    localStorage.setItem('pixelArtData', JSON.stringify(data));
+}
+
+function loadFromLocalStorage() {
+    const saved = localStorage.getItem('pixelArtData');
+    if (!saved) return false;
+    
+    try {
+        const data = JSON.parse(saved);
+        
+        // Восстанавливаем палитру
+        if (data.colors && data.colors.length > 0) {
+            colors = data.colors;
+        }
+        
+        // Восстанавливаем размер
+        if (data.gridSize) {
+            gridSize = data.gridSize;
+            document.getElementById('grid-size').value = gridSize;
+        }
+        
+        // Пересоздаём палитру и сетку
+        createPalette();
+        
+        // Создаём сетку
+        createGrid();
+        
+        // Восстанавливаем рисунок
+        if (data.canvasData && data.canvasData.length === grid.length) {
+            grid.forEach((pixel, i) => {
+                if (data.canvasData[i]) {
+                    pixel.style.backgroundColor = data.canvasData[i];
+                }
+            });
+        }
+        
+        // Восстанавливаем выбранный цвет
+        if (data.currentColor) {
+            currentColor = data.currentColor;
+            // Обновляем активный цвет в палитре
+            document.querySelectorAll('.color-swatch').forEach(sw => {
+                if (sw.style.backgroundColor === currentColor) {
+                    sw.classList.add('active');
+                }
+            });
+        }
+        
+        return true;
+    } catch(e) {
+        console.log('Ошибка загрузки данных');
+        return false;
+    }
+}
+
+// Автосохранение при изменениях
+function autoSave() {
+    saveToLocalStorage();
+}
+
+// Добавляем автосохранение в ключевые функции
+const originalHandlePixel = handlePixel;
+handlePixel = function(pixel) {
+    originalHandlePixel(pixel);
+    setTimeout(autoSave, 100); // небольшая задержка
+};
+
+const originalFloodFill = floodFill;
+floodFill = function(startPixel) {
+    originalFloodFill(startPixel);
+    setTimeout(autoSave, 800); // после анимации заливки
+};
+
+const originalClearGrid = clearGrid;
+clearGrid = function() {
+    originalClearGrid();
+    setTimeout(autoSave, 100);
+};
+
+// ====================== ИНИЦИАЛИЗАЦИЯ ======================
 window.onload = () => {
-    createPalette();
-    createGrid();
+    const loaded = loadFromLocalStorage();
+    
+    if (!loaded) {
+        createPalette();
+        createGrid();
+    }
     
     document.addEventListener('mouseup', () => isDrawing = false);
     document.addEventListener('mouseleave', () => isDrawing = false);
     
-    console.log('%cPixelArt готов к работе!', 'color:#ff4d94; font-size:16px');
+    console.log('%cPixelArt готов к работе! Данные сохраняются автоматически.', 'color:#ff4d94; font-size:16px');
 };
