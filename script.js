@@ -85,7 +85,6 @@ function downloadImage() {
     }).catch(err => alert('Ошибка сохранения'));
 }
 
-// ==================== НОРМАЛЬНАЯ ЗАЛИВКА ====================
 function floodFill(startPixel) {
     const targetColor = startPixel.style.backgroundColor || defaultBg;
     if (targetColor === currentColor) return;
@@ -121,15 +120,14 @@ function floodFill(startPixel) {
             }
         }
     }
-
-    // Staggering анимация
+ 
     toFill.forEach((pixel, i) => {
         setTimeout(() => {
             pixel.style.backgroundColor = currentColor;
         }, i * 2);
     });
 
-    // Анимация через anime.js
+
     anime({
         targets: toFill,
         scale: [0.7, 1],
@@ -143,7 +141,6 @@ function scrollToEditor() {
     document.getElementById('editor-section').scrollIntoView({ behavior: "smooth" });
 }
 
-// ====================== LOCALSTORAGE ======================
 
 function saveToLocalStorage() {
     const canvasData = grid.map(pixel => pixel.style.backgroundColor || defaultBg);
@@ -165,24 +162,19 @@ function loadFromLocalStorage() {
     try {
         const data = JSON.parse(saved);
         
-        // Восстанавливаем палитру
         if (data.colors && data.colors.length > 0) {
             colors = data.colors;
         }
         
-        // Восстанавливаем размер
         if (data.gridSize) {
             gridSize = data.gridSize;
             document.getElementById('grid-size').value = gridSize;
         }
         
-        // Пересоздаём палитру и сетку
         createPalette();
         
-        // Создаём сетку
         createGrid();
         
-        // Восстанавливаем рисунок
         if (data.canvasData && data.canvasData.length === grid.length) {
             grid.forEach((pixel, i) => {
                 if (data.canvasData[i]) {
@@ -191,10 +183,8 @@ function loadFromLocalStorage() {
             });
         }
         
-        // Восстанавливаем выбранный цвет
         if (data.currentColor) {
             currentColor = data.currentColor;
-            // Обновляем активный цвет в палитре
             document.querySelectorAll('.color-swatch').forEach(sw => {
                 if (sw.style.backgroundColor === currentColor) {
                     sw.classList.add('active');
@@ -209,22 +199,20 @@ function loadFromLocalStorage() {
     }
 }
 
-// Автосохранение при изменениях
 function autoSave() {
     saveToLocalStorage();
 }
 
-// Добавляем автосохранение в ключевые функции
 const originalHandlePixel = handlePixel;
 handlePixel = function(pixel) {
     originalHandlePixel(pixel);
-    setTimeout(autoSave, 100); // небольшая задержка
+    setTimeout(autoSave, 100);
 };
 
 const originalFloodFill = floodFill;
 floodFill = function(startPixel) {
     originalFloodFill(startPixel);
-    setTimeout(autoSave, 800); // после анимации заливки
+    setTimeout(autoSave, 800);  
 };
 
 const originalClearGrid = clearGrid;
@@ -233,7 +221,6 @@ clearGrid = function() {
     setTimeout(autoSave, 100);
 };
 
-// ====================== ИНИЦИАЛИЗАЦИЯ ======================
 window.onload = () => {
     const loaded = loadFromLocalStorage();
     
