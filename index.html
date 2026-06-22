@@ -15,7 +15,6 @@
         <button onclick="scrollToEditor()" class="btn">Открыть редактор</button>
     </nav>
 
-    <!-- Hero -->
     <section id="hero">
         <div class="hero-content">
             <h1 class="logo-big">PIXEL ART</h1>
@@ -24,11 +23,9 @@
         </div>
     </section>
 
-    <!-- Редактор -->
     <section id="editor-section">
         <h2>Пиксельный Редактор</h2>
         <div class="editor-container">
-            <!-- Toolbar -->
             <div class="toolbar">
                 <button class="tool-btn active" id="tool-pencil" onclick="selectTool('pencil')">✏️ Карандаш</button>
                 <button class="tool-btn" id="tool-eraser" onclick="selectTool('eraser')">🧼 Ластик</button>
@@ -37,12 +34,10 @@
                 <button onclick="downloadImage()" class="tool-btn">⬇️ Скачать PNG</button>
             </div>
 
-            <!-- Canvas -->
             <div class="canvas-container">
                 <div id="pixel-grid"></div>
             </div>
 
-            <!-- Palette -->
             <div class="palette-panel">
                 <h3>Палитра</h3>
                 <div id="palette" class="palette"></div>
