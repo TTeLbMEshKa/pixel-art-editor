@@ -12,7 +12,6 @@ body {
     line-height: 1.6;
 }
 
-/* Навигация */
 nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -33,7 +32,6 @@ nav {
     -webkit-text-fill-color: transparent; 
 }
 
-/* ==================== КРАСИВЫЙ HERO ==================== */
 #hero {
     height: 100vh;
     display: flex;
@@ -84,7 +82,6 @@ nav {
     text-shadow: 0 0 40px rgba(255, 77, 148, 0.5);
 }
 
-/* Кнопки */
 .btn {
     padding: 16px 40px;
     font-size: 1.3rem;
@@ -99,7 +96,6 @@ nav {
 
 .btn:hover { transform: scale(1.08); box-shadow: 0 0 25px rgba(255,77,148,0.6); }
 
-/* Редактор */
 #editor-section {
     padding: 100px 5%;
 }
@@ -132,7 +128,6 @@ nav {
     background: #3a2a4a; 
 }
 
-/* Холст */
 .canvas-container {
     display: flex;
     justify-content: center;
@@ -157,7 +152,6 @@ nav {
     cursor: crosshair;
 }
 
-/* Палитра */
 .palette-panel h3 { margin-bottom: 15px; color: white; }
 
 .palette { 
@@ -188,7 +182,6 @@ footer {
     margin-top: 50px;
 }
 
-/* Адаптив */
 @media (max-width: 900px) {
     .editor-container {
         grid-template-columns: 1fr;
